@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Mercadito_Chavez_Sanabria
+{
+    public partial class BITACORA : Form
+    {
+        Conexion cnn = new Conexion();
+        public BITACORA()
+        {
+            InitializeComponent();
+        }
+
+        private void btnRegresar_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            Form n = new MENU();
+            n.Show();
+
+        }
+
+        private void BITACORA_Load(object sender, EventArgs e)
+        {
+            cnn.ConsultasGrid("exec sp_ConsultarBitacora", dataGridView1);
+          
+        }
+    }
+}
