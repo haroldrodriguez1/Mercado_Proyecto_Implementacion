@@ -1,106 +1,103 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System; // Importa el espacio de nombres System que contiene clases fundamentales
+using System.Collections.Generic; // Importa clases para colecciones genéricas
+using System.ComponentModel; // Importa clases para componentes
+using System.Data; // Importa clases para acceso a datos
+using System.Drawing; // Importa clases para manejo de gráficos
+using System.Linq; // Importa clases para consultas LINQ
+using System.Text; // Importa clases para manipulación de texto
+using System.Threading.Tasks; // Importa clases para programación asíncrona y tareas
+using System.Windows.Forms; // Importa clases para la creación de formularios y controles Windows Forms
 
-namespace Mercadito_Chavez_Sanabria
+namespace Mercadito_Chavez_Sanabria // Define el namespace del proyecto o aplicación
 {
-    public partial class Usuarios : Form
+    public partial class Usuarios : Form // Clase parcial Usuarios que hereda de Form (ventana de Windows Forms)
     {
-        public Usuarios()
+        public Usuarios() // Constructor de la clase Usuarios
         {
-            InitializeComponent();
+            InitializeComponent(); // Inicializa los componentes visuales del formulario
         }
 
-        private void btnRegresar_Click(object sender, EventArgs e)
+        private void btnRegresar_Click(object sender, EventArgs e) // Evento click del botón Regresar
         {
-            this.Close();
-            Form n = new MENU();
-            n.Show();
+            this.Close(); // Cierra el formulario actual
+            Form n = new MENU(); // Crea una nueva instancia del formulario MENU
+            n.Show(); // Muestra el formulario MENU
         }
 
-        private void Usuarios_Load(object sender, EventArgs e)
+        private void Usuarios_Load(object sender, EventArgs e) // Evento Load del formulario Usuarios
         {
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.Single;
-            CargarDatos();
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill; // Configura que las columnas del DataGridView se ajusten automáticamente para llenar el espacio
+            dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.Single; // Establece el estilo del borde de las celdas como línea simple
+            CargarDatos(); // Llama al método que carga los datos en el DataGridView
         }
 
+        Conexion cnn = new Conexion(); // Crea una instancia de la clase Conexion para manejo de base de datos
+        int selectedClientId = 0; // Variable para almacenar el ID del usuario seleccionado
+        string name = ""; // Variable string para almacenar nombre (no usada en este código)
+        string estadotxt; // Variable string para almacenar estado (no usada en este código)
 
-        Conexion cnn = new Conexion();
-        int selectedClientId = 0;
-        string name = "";
-        string estadotxt;
-
-        private void CargarDatos()
+        private void CargarDatos() // Método para cargar datos en el DataGridView
         {
-            cnn.ConsultasGrid("exec sp_ConsultarUsuarios '"+""+"'", dataGridView1);
+            cnn.ConsultasGrid("exec sp_ConsultarUsuarios '" + "" + "'", dataGridView1); // Ejecuta el procedimiento almacenado sp_ConsultarUsuarios con parámetro vacío y carga el resultado en dataGridView1
         }
-        private bool Check()
+
+        private bool Check() // Método para validar campos antes de guardar o editar
         {
-            if (string.IsNullOrWhiteSpace(txtNombre.Text) ||
-                string.IsNullOrWhiteSpace(txtContrasena.Text) ||
-                string.IsNullOrWhiteSpace(cmbUsuarios.Text))
+            if (string.IsNullOrWhiteSpace(txtNombre.Text) || // Verifica si el campo Nombre está vacío o con espacios
+                string.IsNullOrWhiteSpace(txtContrasena.Text) || // Verifica si el campo Contraseña está vacío o con espacios
+                string.IsNullOrWhiteSpace(cmbUsuarios.Text)) // Verifica si el ComboBox de Usuarios está vacío o con espacios
             {
-                MessageBox.Show("Todos los campos son obligatorios.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
+                MessageBox.Show("Todos los campos son obligatorios.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); // Muestra mensaje de advertencia
+                return false; // Retorna falso porque no pasa la validación
             }
 
-            
-
-            return true;
-        }
-        private void Clear()
-        {
-            txtContrasena.Clear();
-            txtNombre.Clear();
-            cmbUsuarios.Items.Clear();
-            cmbUsuarios.Items.Add("Administrador");
-            cmbUsuarios.Items.Add("Cajero");
-
-
-        }
-        private void EditarImg_Click(object sender, EventArgs e)
-        {
-            btnEditar.PerformClick();
+            return true; // Retorna verdadero si todo está correcto
         }
 
-        private void EliminarImg_Click(object sender, EventArgs e)
+        private void Clear() // Método para limpiar los campos del formulario
         {
-            btnEliminar.PerformClick();
+            txtContrasena.Clear(); // Limpia el campo Contraseña
+            txtNombre.Clear(); // Limpia el campo Nombre
+            cmbUsuarios.Items.Clear(); // Limpia los ítems del ComboBox Usuarios
+            cmbUsuarios.Items.Add("Administrador"); // Agrega el ítem "Administrador" al ComboBox
+            cmbUsuarios.Items.Add("Cajero"); // Agrega el ítem "Cajero" al ComboBox
         }
 
-        private void GuardarImg_Click(object sender, EventArgs e)
+        private void EditarImg_Click(object sender, EventArgs e) // Evento click de la imagen Editar
         {
-            btnGuardar.PerformClick();
+            btnEditar.PerformClick(); // Simula el click en el botón Editar
         }
 
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void EliminarImg_Click(object sender, EventArgs e) // Evento click de la imagen Eliminar
         {
-            MostrarBotones();
-            if (e.RowIndex >= 0)
+            btnEliminar.PerformClick(); // Simula el click en el botón Eliminar
+        }
+
+        private void GuardarImg_Click(object sender, EventArgs e) // Evento click de la imagen Guardar
+        {
+            btnGuardar.PerformClick(); // Simula el click en el botón Guardar
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) // Evento click en el contenido de una celda del DataGridView
+        {
+            MostrarBotones(); // Muestra los botones de editar y eliminar
+            if (e.RowIndex >= 0) // Si la fila clickeada es válida (no encabezado)
             {
-                int idCliente = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value);
-                txtNombre.Text = Convert.ToString(dataGridView1.Rows[e.RowIndex].Cells[1].Value);
-                txtContrasena.Text = Convert.ToString(dataGridView1.Rows[e.RowIndex].Cells[2].Value);
-                cmbUsuarios.Text = Convert.ToString(dataGridView1.Rows[e.RowIndex].Cells[3].Value);
-                if (cmbUsuarios.Text =="Administrador")
+                int idCliente = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value); // Obtiene el ID del usuario de la primera celda de la fila
+                txtNombre.Text = Convert.ToString(dataGridView1.Rows[e.RowIndex].Cells[1].Value); // Coloca el nombre del usuario en el textbox Nombre
+                txtContrasena.Text = Convert.ToString(dataGridView1.Rows[e.RowIndex].Cells[2].Value); // Coloca la contraseña del usuario en el textbox Contraseña
+                cmbUsuarios.Text = Convert.ToString(dataGridView1.Rows[e.RowIndex].Cells[3].Value); // Coloca el rol del usuario en el ComboBox Usuarios
+                if (cmbUsuarios.Text == "Administrador") // Si el texto del ComboBox es "Administrador"
                 {
-                    cmbUsuarios.SelectedValue = 1;
+                    cmbUsuarios.SelectedValue = 1; // Selecciona el valor 1 (probablemente para manejar roles internamente)
                 }
                 else
                 {
-                    cmbUsuarios.SelectedValue=0;
+                    cmbUsuarios.SelectedValue = 0; // Selecciona el valor 0 en otro caso
                 }
-                selectedClientId = idCliente; 
-               
-                /*if (estadotxt == "ACTIVO")
+                selectedClientId = idCliente; // Guarda el ID del usuario seleccionado en la variable
+
+                /*if (estadotxt == "ACTIVO") // Código comentado para manejo de estado con checkbox
                 {
                     checkBox1.Checked = true;
                 }
@@ -111,127 +108,123 @@ namespace Mercadito_Chavez_Sanabria
             }
         }
 
-
-        private void btnGuardar_Click(object sender, EventArgs e)
+        private void btnGuardar_Click(object sender, EventArgs e) // Evento click del botón Guardar
         {
-            if (Check())
+            if (Check()) // Si pasa la validación de campos
             {
-                int estado = 1;
-                int rol = 0;
-                
-               
-                if (cmbUsuarios.Text == "Administrador")
+                int estado = 1; // Estado por defecto activo
+                int rol = 0; // Rol por defecto 0
+
+                if (cmbUsuarios.Text == "Administrador") // Si el rol es Administrador
                 {
-                    rol = 1;
+                    rol = 1; // Asigna rol 1
                 }
                 else
                 {
-                    rol = 0;
+                    rol = 0; // Si no, rol 0
                 }
-                cnn.Modificaciones("exec sp_InsertarUsuario '" + txtNombre.Text + "','" + txtContrasena.Text + "','" + rol + "','" + estado + "'");
-                CargarDatos();
-                OcultarBotones();
-                Clear();
+                cnn.Modificaciones("exec sp_InsertarUsuario '" + txtNombre.Text + "','" + txtContrasena.Text + "','" + rol + "','" + estado + "'"); // Ejecuta procedimiento almacenado para insertar usuario
+                CargarDatos(); // Recarga los datos en el DataGridView
+                OcultarBotones(); // Oculta los botones de editar y eliminar
+                Clear(); // Limpia los campos
             }
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellMouseEventArgs e) // Evento no implementado, parece duplicado
+        {
 
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void OcultarBotones() // Método para ocultar botones e imágenes de editar y eliminar
         {
+            btnEditar.Visible = false; // Oculta botón Editar
+            btnEliminar.Visible = false; // Oculta botón Eliminar
+            imgEditar.Visible = false; // Oculta imagen Editar
+            imgEliminar.Visible = false; // Oculta imagen Eliminar
+        }
 
-        }
-        private void OcultarBotones()
+        private void MostrarBotones() // Método para mostrar botones e imágenes de editar y eliminar
         {
-            btnEditar.Visible = false;
-            btnEliminar.Visible = false;
-            imgEditar.Visible = false;
-            imgEliminar.Visible = false;
+            imgEditar.Visible = true; // Muestra imagen Editar
+            imgEliminar.Visible = true; // Muestra imagen Eliminar
+            btnEditar.Visible = true; // Muestra botón Editar
+            btnEliminar.Visible = true; // Muestra botón Eliminar
         }
-        private void MostrarBotones()
+
+        private void btnEliminar_Click(object sender, EventArgs e) // Evento click del botón Eliminar
         {
-            imgEditar.Visible = true;
-            imgEliminar.Visible = true;
-            btnEditar.Visible = true;
-            btnEliminar.Visible = true;
-        }
-        private void btnEliminar_Click(object sender, EventArgs e)
-        {
-            if (selectedClientId > 0)
+            if (selectedClientId > 0) // Si se ha seleccionado un usuario válido
             {
+                bool resultado = cnn.Modificaciones("exec sp_EliminarUsuario '" + selectedClientId + "'"); // Ejecuta procedimiento almacenado para eliminar usuario
 
-                bool resultado = cnn.Modificaciones("exec sp_EliminarUsuario '" + selectedClientId + "'"); // Asumiendo que la clase 'Conexion' tiene este método para ejecutar comandos
-
-                if (resultado)
+                if (resultado) // Si la eliminación fue exitosa
                 {
-                    MessageBox.Show("Usuario eliminado exitosamente.");
-                    CargarDatos();
-                    OcultarBotones();
-                    Clear();
+                    MessageBox.Show("Usuario eliminado exitosamente."); // Muestra mensaje de éxito
+                    CargarDatos(); // Recarga datos
+                    OcultarBotones(); // Oculta botones
+                    Clear(); // Limpia campos
                 }
                 else
                 {
-                    MessageBox.Show("Hubo un error al eliminar el Usuario.");
+                    MessageBox.Show("Hubo un error al eliminar el Usuario."); // Muestra mensaje de error
                 }
             }
             else
             {
-                MessageBox.Show("Por favor, selecciona un Usuario para eliminar.");
+                MessageBox.Show("Por favor, selecciona un Usuario para eliminar."); // Indica que no hay usuario seleccionado
             }
         }
 
-        private void btnEditar_Click(object sender, EventArgs e)
+        private void btnEditar_Click(object sender, EventArgs e) // Evento click del botón Editar
         {
-            if (Check())
+            if (Check()) // Si pasa la validación de campos
             {
-
-                if (selectedClientId > 0)
+                if (selectedClientId > 0) // Si hay un usuario seleccionado
                 {
-                    int estado = 1;
-                    int rol = 0;
-                    
-                    if (cmbUsuarios.Text == "Administrador")
-                    {
-                        rol = 1;
-                    }
-                    else
-                    {
-                        rol = 0;
-                    }
-                    bool resultado = cnn.Modificaciones("exec sp_ActualizarUsuario '" + selectedClientId + "','" + txtNombre.Text + "','" + txtContrasena.Text + "','" + rol + "','" + estado + "'");
+                    int estado = 1; // Estado activo
+                    int rol = 0; // Rol por defecto 0
 
-                    if (resultado)
+                    if (cmbUsuarios.Text == "Administrador") // Si el rol es Administrador
                     {
-                        MessageBox.Show("Usuario editado exitosamente.");
-                        CargarDatos();
-                        OcultarBotones();
-                        Clear();
+                        rol = 1; // Asigna rol 1
                     }
                     else
                     {
-                        MessageBox.Show("Hubo un error al editar el Usuario.");
+                        rol = 0; // Si no, rol 0
+                    }
+                    bool resultado = cnn.Modificaciones("exec sp_ActualizarUsuario '" + selectedClientId + "','" + txtNombre.Text + "','" + txtContrasena.Text + "','" + rol + "','" + estado + "'"); // Ejecuta procedimiento para actualizar usuario
+
+                    if (resultado) // Si actualización fue exitosa
+                    {
+                        MessageBox.Show("Usuario editado exitosamente."); // Muestra mensaje de éxito
+                        CargarDatos(); // Recarga datos
+                        OcultarBotones(); // Oculta botones
+                        Clear(); // Limpia campos
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hubo un error al editar el Usuario."); // Muestra mensaje de error
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Por favor, selecciona un empleado para editar.");
+                    MessageBox.Show("Por favor, selecciona un empleado para editar."); // Indica que no hay usuario seleccionado para editar
                 }
             }
-
-
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void textBox1_TextChanged(object sender, EventArgs e) // Evento TextChanged para un TextBox (posiblemente búsqueda)
         {
-            string busqueda = textBox1.Text.Trim();
+            string busqueda = textBox1.Text.Trim(); // Obtiene el texto del textbox sin espacios
 
-            if (string.IsNullOrEmpty(busqueda))
+            if (string.IsNullOrEmpty(busqueda)) // Si el texto está vacío
             {
-                CargarDatos();
+                CargarDatos(); // Carga todos los datos
             }
             else
             {
-                string comando = "exec sp_ConsultarUsuarios @nombre = '" + busqueda + "'";
-                cnn.Busquedas(comando, dataGridView1, "");
+                string comando = "exec sp_ConsultarUsuarios @nombre = '" + busqueda + "'"; // Crea comando con parámetro nombre para búsqueda
+                cnn.Busquedas(comando, dataGridView1, ""); // Ejecuta búsqueda y carga resultados en el DataGridView
             }
         }
     }
